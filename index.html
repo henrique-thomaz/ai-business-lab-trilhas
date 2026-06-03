@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Business Lab · Hub de Formação em IA</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&family=Barlow+Condensed:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --blue-universe:  #010C53;
+  --deep-blue:      #011676;
+  --tech-blue:      #0429BC;
+  --dev-blue:       #1F53E5;
+  --new-black:      #0C0C0E;
+  --white-snow:     #F4F5F6;
+
+  --bg-0:           #06070e;
+  --bg-1:           #0a0c1a;
+  --surface:        rgba(1, 22, 118, 0.28);
+  --surface-hover:  rgba(4, 41, 188, 0.38);
+  --border:         rgba(31,83,229,0.16);
+  --border-hover:   rgba(31,83,229,0.38);
+
+  --text-primary:   #F4F5F6;
+  --text-secondary: rgba(244,245,246,0.62);
+  --text-muted:     rgba(244,245,246,0.32);
+
+  --c-base:    #F4F5F6;
+  --c-base-bg: rgba(244,245,246,0.07);
+  --c-t1:      #3d8ef5;
+  --c-t1-bg:   rgba(61,142,245,0.09);
+  --c-t2:      #00d4aa;
+  --c-t2-bg:   rgba(0,212,170,0.09);
+  --c-t3:      #f0a500;
+  --c-t3-bg:   rgba(240,165,0,0.09);
+  --c-t5:      #e85bff;
+  --c-t5-bg:   rgba(232,91,255,0.09);
+
+  --radius-sm: 3px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-body:    'Barlow', sans-serif;
+  --transition:   0.22s cubic-bezier(0.4,0,0.2,1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-0);
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Subtle grid texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 72px 72px;
+  pointer-events: none; z-index: 0;
+}
+
+/* ─────────────── NAVBAR ─────────────── */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+  background: rgba(6,7,14,0.88);
+  backdrop-filter: blur(24px) saturate(1.5);
+  border-bottom: 1px solid rgba(31,83,229,0.22);
+  padding: 0 40px;
+  display: flex; align-items: center;
+  height: 62px;
+  transition: background var(--transition);
+}
+.navbar.scrolled {
+  background: rgba(4,5,10,0.97);
+  border-bottom-color: rgba(31,83,229,0.35);
+}
+.navbar-inner {
+  max-width: 1280px; margin: 0 auto; width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.navbar-logo-wrap {
+  display: flex; align-items: center; gap: 14px;
+  text-decoration: none; pointer-events: none; cursor: default;
+}
+.navbar-logo-svg { height: 26px; width: auto; }
+.navbar-divider {
+  width: 1px; height: 20px;
+  background: rgba(31,83,229,0.45);
+}
+.navbar-tag {
+  font-family: var(--font-display);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--dev-blue);
+}
+.navbar-label {
+  font-family: var(--font-body);
+  font-size: 11px; font-weight: 400;
+  color: var(--text-muted); letter-spacing: 0.04em;
+}
+
+/* ─────────────── HERO ─────────────── */
+.hero {
+  position: relative;
+  padding: 120px 40px 90px;
+  text-align: center;
+  overflow: hidden;
+  min-height: 640px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  isolation: isolate;
+}
+
+.hero-video-bg {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: -2; overflow: hidden; pointer-events: none;
+}
+.hero-video-bg iframe {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 177.78vh; height: 56.25vw;
+  min-width: 100%; min-height: 100%;
+  opacity: 0.45;
+  border: none;
+  filter: saturate(1.15) contrast(1.05);
+}
+/* Refined overlay - less opaque so video shines */
+.hero-video-bg::after {
+  content: '';
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(6,7,14,0.60) 0%,
+    rgba(6,7,14,0.30) 40%,
+    rgba(6,7,14,0.55) 75%,
+    rgba(6,7,14,0.92) 100%
+  );
+}
+
+/* Radial ambient glow */
+.hero::before {
+  content: ''; position: absolute;
+  width: 700px; height: 700px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(31,83,229,0.18) 0%, transparent 65%);
+  top: -200px; left: 50%; transform: translateX(-50%);
+  filter: blur(80px); z-index: -1; pointer-events: none;
+}
+
+.hero > *:not(.hero-video-bg) { position: relative; z-index: 2; }
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-display);
+  font-size: 11px; font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase;
+  color: var(--white-snow);
+  background: rgba(31,83,229,0.18);
+  border: 1px solid rgba(31,83,229,0.5);
+  padding: 7px 20px; border-radius: 2px; margin-bottom: 28px;
+  animation: fadeSlideUp 0.5s ease both;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(56px, 9vw, 108px); font-weight: 900;
+  line-height: 0.93; letter-spacing: -0.02em; margin-bottom: 20px;
+  text-transform: uppercase;
+  animation: fadeSlideUp 0.5s 0.08s ease both;
+}
+.hero h1 .grad {
+  display: block;
+  background: linear-gradient(135deg, #1F53E5 0%, #3d8ef5 55%, #7ab8ff 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.hero-tagline {
+  font-family: var(--font-display);
+  font-size: clamp(16px, 2.2vw, 22px);
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--white-snow); margin-bottom: 14px;
+  animation: fadeSlideUp 0.5s 0.13s ease both;
+}
+
+.hero-sub {
+  font-size: clamp(14px, 1.6vw, 16px); color: var(--text-secondary);
+  max-width: 520px; margin: 0 auto 44px; font-weight: 400;
+  animation: fadeSlideUp 0.5s 0.18s ease both;
+  line-height: 1.65;
+}
+
+.hero-stats {
+  display: flex; align-items: stretch; justify-content: center;
+  background: rgba(1,12,83,0.45);
+  border: 1px solid rgba(31,83,229,0.30);
+  border-radius: 3px;
+  overflow: hidden; max-width: 560px; margin: 0 auto 44px;
+  animation: fadeSlideUp 0.5s 0.24s ease both;
+  backdrop-filter: blur(20px);
+}
+.hero-stat { flex: 1; padding: 22px 20px; text-align: center; position: relative; }
+.hero-stat + .hero-stat::before {
+  content: ''; position: absolute; left: 0; top: 22%; height: 56%;
+  width: 1px; background: rgba(31,83,229,0.35);
+}
+.hero-stat-n {
+  font-family: var(--font-display); font-size: 38px; font-weight: 800;
+  color: var(--white-snow); letter-spacing: -0.02em; line-height: 1;
+}
+.hero-stat-l {
+  font-size: 9px; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.18em; margin-top: 5px;
+  font-weight: 700;
+}
+
+.hero-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--dev-blue);
+  color: var(--white-snow); font-family: var(--font-display);
+  font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 15px 40px; border-radius: 2px; border: none; cursor: pointer;
+  text-decoration: none;
+  transition: transform var(--transition), background var(--transition), box-shadow var(--transition);
+  box-shadow: 0 4px 28px rgba(31,83,229,0.45);
+  animation: fadeSlideUp 0.5s 0.32s ease both;
+}
+.hero-cta:hover {
+  background: #2d66f2;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px rgba(31,83,229,0.65);
+}
+
+/* ─────────────── ABOUT SECTIONS ─────────────── */
+.section-block {
+  position: relative; z-index: 1;
+  max-width: 1280px; margin: 0 auto;
+  padding: 80px 40px;
+}
+
+.section-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--dev-blue);
+  border-bottom: 1px solid rgba(31,83,229,0.4);
+  padding-bottom: 6px; margin-bottom: 20px;
+}
+.section-eyebrow i { font-size: 8px; }
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4.5vw, 52px); font-weight: 800;
+  text-transform: uppercase; letter-spacing: -0.01em;
+  color: var(--text-primary); line-height: 1.05; margin-bottom: 16px;
+}
+.section-title em {
+  font-style: normal;
+  background: linear-gradient(135deg, #1F53E5, #3d8ef5);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+
+.section-lead {
+  font-size: clamp(14px, 1.5vw, 16px); color: var(--text-secondary);
+  max-width: 640px; line-height: 1.7; margin-bottom: 0;
+}
+
+/* ─────────────── PARADOX SECTION ─────────────── */
+.paradox-section {
+  background: linear-gradient(180deg, var(--bg-0) 0%, rgba(1,12,83,0.15) 50%, var(--bg-0) 100%);
+  border-top: 1px solid rgba(31,83,229,0.12);
+  border-bottom: 1px solid rgba(31,83,229,0.12);
+}
+
+.paradox-header {
+  margin-bottom: 52px;
+}
+
+.paradox-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(31,83,229,0.12);
+  border: 1px solid rgba(31,83,229,0.12);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.paradox-card {
+  background: rgba(6,7,14,0.85);
+  padding: 32px 28px;
+  position: relative;
+  transition: background var(--transition);
+}
+.paradox-card:hover {
+  background: rgba(1,12,83,0.55);
+}
+.paradox-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--dev-blue), transparent);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.paradox-card:hover::before { opacity: 1; }
+
+.paradox-icon {
+  width: 40px; height: 40px;
+  border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  background: rgba(31,83,229,0.10);
+  color: var(--dev-blue);
+  margin-bottom: 16px;
+  border: 1px solid rgba(31,83,229,0.2);
+}
+
+.paradox-card-title {
+  font-family: var(--font-display);
+  font-size: 14px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.paradox-card-desc {
+  font-size: 13px; color: var(--text-muted); line-height: 1.6;
+}
+
+/* ─────────────── QUOTE SECTION ─────────────── */
+.quote-section {
+  border-top: 1px solid rgba(31,83,229,0.12);
+  background: rgba(1,12,83,0.10);
+}
+
+.quote-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 48px;
+  border: 1px solid rgba(31,83,229,0.15);
+  border-radius: 4px;
+  overflow: hidden;
+  background: rgba(31,83,229,0.08);
+}
+
+.quote-item {
+  background: rgba(6,7,14,0.9);
+  padding: 44px 40px;
+  position: relative;
+}
+.quote-item::before {
+  content: '"';
+  position: absolute; top: 20px; left: 32px;
+  font-family: var(--font-display); font-size: 80px; font-weight: 900;
+  color: rgba(31,83,229,0.15); line-height: 1;
+  pointer-events: none;
+}
+.quote-text {
+  font-size: clamp(15px, 1.5vw, 18px); font-weight: 400;
+  color: var(--text-secondary); line-height: 1.7;
+  font-style: italic; position: relative; z-index: 1;
+}
+.quote-source {
+  margin-top: 20px;
+  font-family: var(--font-display); font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.18em;
+  color: var(--dev-blue);
+}
+
+/* ─────────────── AUDIENCE SECTION ─────────────── */
+.audience-section {
+  border-top: 1px solid rgba(31,83,229,0.12);
+}
+
+.audience-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  margin-top: 48px;
+  align-items: start;
+}
+
+.audience-desc {
+  font-size: 15px; color: var(--text-secondary); line-height: 1.75;
+}
+.audience-desc p + p { margin-top: 14px; }
+
+.audience-list {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 0;
+  border: 1px solid rgba(31,83,229,0.15);
+  border-radius: 4px; overflow: hidden;
+}
+.audience-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(31,83,229,0.10);
+  background: rgba(1,12,83,0.20);
+  transition: background var(--transition);
+}
+.audience-item:last-child { border-bottom: none; }
+.audience-item:hover { background: rgba(1,22,118,0.35); }
+.audience-item i {
+  color: var(--dev-blue); margin-top: 2px; flex-shrink: 0; font-size: 12px;
+}
+.audience-item span {
+  font-size: 13px; color: var(--text-secondary); line-height: 1.5;
+}
+
+/* ─────────────── JOURNEY SECTION ─────────────── */
+.journey-section {
+  border-top: 1px solid rgba(31,83,229,0.12);
+  background: linear-gradient(180deg, rgba(1,12,83,0.08) 0%, transparent 100%);
+}
+
+.journey-intro {
+  max-width: 640px; margin-bottom: 52px;
+}
+.journey-note {
+  font-size: 13px; color: var(--text-muted); line-height: 1.65; margin-top: 12px;
+}
+
+.journey-pillars {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  background: rgba(31,83,229,0.12);
+  border: 1px solid rgba(31,83,229,0.12);
+  border-radius: 4px; overflow: hidden;
+}
+.journey-pillar {
+  background: rgba(6,7,14,0.9);
+  padding: 28px 20px;
+  text-align: center;
+  position: relative;
+  transition: background var(--transition);
+}
+.journey-pillar:hover { background: rgba(1,12,83,0.5); }
+
+.pillar-icon {
+  width: 44px; height: 44px; border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; margin: 0 auto 14px;
+  transition: transform var(--transition);
+}
+.journey-pillar:hover .pillar-icon { transform: translateY(-2px); }
+.pillar-base .pillar-icon { background: var(--c-base-bg); color: var(--c-base); border: 1px solid rgba(244,245,246,0.15); }
+.pillar-t1   .pillar-icon { background: var(--c-t1-bg); color: var(--c-t1); border: 1px solid rgba(61,142,245,0.2); }
+.pillar-t2   .pillar-icon { background: var(--c-t2-bg); color: var(--c-t2); border: 1px solid rgba(0,212,170,0.2); }
+.pillar-t3   .pillar-icon { background: var(--c-t3-bg); color: var(--c-t3); border: 1px solid rgba(240,165,0,0.2); }
+.pillar-t5   .pillar-icon { background: var(--c-t5-bg); color: var(--c-t5); border: 1px solid rgba(232,91,255,0.2); }
+
+.pillar-label {
+  font-family: var(--font-display); font-size: 10px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.14em;
+  color: var(--text-muted); margin-bottom: 6px;
+}
+.pillar-name {
+  font-family: var(--font-display); font-size: 14px; font-weight: 700;
+  text-transform: uppercase; color: var(--text-primary); letter-spacing: 0.04em;
+}
+.pillar-competency {
+  font-size: 11px; color: var(--text-muted); margin-top: 8px; line-height: 1.4;
+}
+
+/* ─────────────── DIFFERENTIALS SECTION ─────────────── */
+.diff-section {
+  border-top: 1px solid rgba(31,83,229,0.12);
+}
+
+.diff-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 48px;
+}
+.diff-card {
+  background: rgba(1,12,83,0.28);
+  border: 1px solid rgba(31,83,229,0.15);
+  border-radius: 3px;
+  padding: 32px 28px;
+  position: relative; overflow: hidden;
+  transition: border-color var(--transition), background var(--transition);
+}
+.diff-card:hover {
+  background: rgba(1,22,118,0.38);
+  border-color: rgba(31,83,229,0.35);
+}
+.diff-card::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--dev-blue), transparent);
+  opacity: 0; transition: opacity var(--transition);
+}
+.diff-card:hover::before { opacity: 1; }
+.diff-number {
+  font-family: var(--font-display); font-size: 48px; font-weight: 900;
+  color: rgba(31,83,229,0.15); line-height: 1;
+  margin-bottom: 16px; letter-spacing: -0.02em;
+}
+.diff-title {
+  font-family: var(--font-display); font-size: 16px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--text-primary); margin-bottom: 10px;
+}
+.diff-desc {
+  font-size: 13px; color: var(--text-muted); line-height: 1.65;
+}
+
+/* ─────────────── OUTCOME SECTION ─────────────── */
+.outcome-section {
+  border-top: 1px solid rgba(31,83,229,0.12);
+  background: linear-gradient(180deg, rgba(1,12,83,0.12) 0%, transparent 100%);
+}
+
+.outcome-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 64px;
+  margin-top: 52px;
+  align-items: start;
+}
+.outcome-desc {
+  font-size: 15px; color: var(--text-secondary); line-height: 1.75;
+}
+
+.outcome-cards {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.outcome-card {
+  background: rgba(1,12,83,0.30);
+  border: 1px solid rgba(31,83,229,0.15);
+  border-radius: 3px;
+  padding: 24px 24px;
+  display: flex; align-items: flex-start; gap: 18px;
+  transition: background var(--transition), border-color var(--transition);
+}
+.outcome-card:hover {
+  background: rgba(1,22,118,0.42);
+  border-color: rgba(31,83,229,0.32);
+}
+.outcome-icon {
+  width: 42px; height: 42px; border-radius: 2px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  background: rgba(31,83,229,0.12);
+  color: var(--dev-blue);
+  border: 1px solid rgba(31,83,229,0.2);
+}
+.outcome-body {}
+.outcome-card-title {
+  font-family: var(--font-display); font-size: 14px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--text-primary); margin-bottom: 5px;
+}
+.outcome-card-desc {
+  font-size: 12px; color: var(--text-muted); line-height: 1.6;
+}
+
+/* ─────────────── SECTION DIVIDER ─────────────── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(31,83,229,0.3), transparent);
+  margin: 0;
+}
+
+/* ─────────────── CONTROLS ─────────────── */
+.controls {
+  position: sticky; top: 62px; z-index: 100;
+  background: rgba(6,7,14,0.96);
+  backdrop-filter: blur(24px) saturate(1.4);
+  border-bottom: 1px solid rgba(31,83,229,0.28);
+  padding: 12px 40px;
+}
+.controls-inner {
+  max-width: 1280px; margin: 0 auto;
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+
+.search-wrap { position: relative; flex: 1; min-width: 220px; }
+.search-wrap i {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  color: var(--text-muted); font-size: 12px; pointer-events: none;
+}
+#search {
+  width: 100%; background: rgba(1,12,83,0.45);
+  border: 1px solid rgba(31,83,229,0.25);
+  border-radius: 2px; color: var(--text-primary);
+  font-family: var(--font-body); font-size: 13px;
+  padding: 9px 16px 9px 38px; outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+#search::placeholder { color: var(--text-muted); }
+#search:focus {
+  border-color: var(--dev-blue);
+  box-shadow: 0 0 0 3px rgba(31,83,229,0.18);
+}
+
+.filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.filter-btn {
+  font-family: var(--font-display); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 7px 16px; border-radius: 2px;
+  border: 1px solid var(--border);
+  background: transparent; color: var(--text-secondary); cursor: pointer;
+  transition: all var(--transition); white-space: nowrap;
+}
+.filter-btn:hover { border-color: var(--dev-blue); color: var(--white-snow); }
+.filter-btn.active { background: var(--dev-blue); border-color: var(--dev-blue); color: var(--white-snow); }
+.filter-btn[data-filter="t1"].active  { background: var(--c-t1);   border-color: var(--c-t1);   color: #fff; }
+.filter-btn[data-filter="t2"].active  { background: var(--c-t2);   border-color: var(--c-t2);   color: #0C0C0E; }
+.filter-btn[data-filter="t3"].active  { background: var(--c-t3);   border-color: var(--c-t3);   color: #0C0C0E; }
+.filter-btn[data-filter="t5"].active  { background: var(--c-t5);   border-color: var(--c-t5);   color: #fff; }
+
+/* ─────────────── MAIN ─────────────── */
+.main { max-width: 1280px; margin: 0 auto; padding: 52px 40px 88px; }
+
+/* ─────────────── TRACK SECTION ─────────────── */
+.track-section { margin-bottom: 44px; animation: fadeSlideUp 0.45s ease both; }
+
+.track-box {
+  border-radius: 3px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  background: rgba(1, 10, 68, 0.38);
+}
+.track-box:hover { border-color: rgba(31,83,229,0.35); }
+.track-box.open  { box-shadow: 0 16px 56px rgba(1,12,83,0.5); }
+
+.track-header {
+  display: flex; align-items: flex-start; gap: 20px;
+  padding: 30px 30px 28px;
+  position: relative; overflow: hidden;
+  cursor: pointer; user-select: none;
+}
+
+.track-header::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+}
+.track-base .track-header::before { background: var(--c-base); }
+.track-t1   .track-header::before { background: var(--c-t1); }
+.track-t2   .track-header::before { background: var(--c-t2); }
+.track-t3   .track-header::before { background: var(--c-t3); }
+.track-t5   .track-header::before { background: var(--c-t5); }
+
+.track-base .track-header { background: linear-gradient(90deg, rgba(244,245,246,0.04) 0%, transparent 55%); }
+.track-t1   .track-header { background: linear-gradient(90deg, rgba(61,142,245,0.06) 0%, transparent 55%); }
+.track-t2   .track-header { background: linear-gradient(90deg, rgba(0,212,170,0.06) 0%, transparent 55%); }
+.track-t3   .track-header { background: linear-gradient(90deg, rgba(240,165,0,0.06) 0%, transparent 55%); }
+.track-t5   .track-header { background: linear-gradient(90deg, rgba(232,91,255,0.06) 0%, transparent 55%); }
+
+.track-toggle {
+  margin-left: auto; flex-shrink: 0;
+  width: 30px; height: 30px; border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(31,83,229,0.10);
+  border: 1px solid rgba(31,83,229,0.22);
+  color: var(--text-muted); font-size: 10px;
+  transition: transform var(--transition), background var(--transition), color var(--transition);
+  align-self: center;
+}
+.track-box.open .track-toggle { transform: rotate(180deg); }
+.track-base.track-box.open .track-toggle { background: rgba(244,245,246,0.10); color: var(--c-base); border-color: rgba(244,245,246,0.25); }
+.track-t1.track-box.open   .track-toggle { background: var(--c-t1-bg); color: var(--c-t1); border-color: rgba(61,142,245,0.4); }
+.track-t2.track-box.open   .track-toggle { background: var(--c-t2-bg); color: var(--c-t2); border-color: rgba(0,212,170,0.4); }
+.track-t3.track-box.open   .track-toggle { background: var(--c-t3-bg); color: var(--c-t3); border-color: rgba(240,165,0,0.4); }
+.track-t5.track-box.open   .track-toggle { background: var(--c-t5-bg); color: var(--c-t5); border-color: rgba(232,91,255,0.4); }
+
+.track-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1);
+  padding: 0 30px;
+  border-top: 0 solid transparent;
+}
+.track-box.open .track-body {
+  max-height: 4000px;
+  padding: 26px 30px 30px;
+  border-top: 1px solid rgba(31,83,229,0.18);
+}
+
+.track-icon-wrap {
+  width: 48px; height: 48px; border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 19px; flex-shrink: 0;
+}
+.track-base .track-icon-wrap { background: rgba(244,245,246,0.07); color: var(--c-base); }
+.track-t1   .track-icon-wrap { background: var(--c-t1-bg); color: var(--c-t1); }
+.track-t2   .track-icon-wrap { background: var(--c-t2-bg); color: var(--c-t2); }
+.track-t3   .track-icon-wrap { background: var(--c-t3-bg); color: var(--c-t3); }
+.track-t5   .track-icon-wrap { background: var(--c-t5-bg); color: var(--c-t5); }
+
+.track-meta { flex: 1; }
+.track-badge-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.track-badge {
+  font-family: var(--font-display); font-size: 9px; font-weight: 800;
+  letter-spacing: 0.18em; text-transform: uppercase; padding: 3px 12px; border-radius: 2px;
+}
+.track-base .track-badge { background: rgba(244,245,246,0.08); color: var(--c-base); border: 1px solid rgba(244,245,246,0.18); }
+.track-t1   .track-badge { background: var(--c-t1-bg); color: var(--c-t1); border: 1px solid rgba(61,142,245,0.22); }
+.track-t2   .track-badge { background: var(--c-t2-bg); color: var(--c-t2); border: 1px solid rgba(0,212,170,0.22); }
+.track-t3   .track-badge { background: var(--c-t3-bg); color: var(--c-t3); border: 1px solid rgba(240,165,0,0.22); }
+.track-t5   .track-badge { background: var(--c-t5-bg); color: var(--c-t5); border: 1px solid rgba(232,91,255,0.22); }
+
+.track-count { font-size: 10px; color: var(--text-muted); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+.track-title {
+  font-family: var(--font-display); font-size: 22px; font-weight: 800;
+  color: var(--text-primary); margin-bottom: 2px;
+  letter-spacing: 0.01em; text-transform: uppercase;
+}
+.track-subtitle { font-size: 13px; color: var(--text-secondary); font-weight: 400; margin-bottom: 8px; }
+.track-desc { font-size: 13px; color: var(--text-muted); line-height: 1.65; max-width: 620px; }
+
+.core-competency {
+  margin-top: 14px;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-size: 10px; font-weight: 700;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 5px 14px; border-radius: 2px; border: 1px solid;
+}
+.track-base .core-competency { background: rgba(244,245,246,0.05); color: var(--c-base); border-color: rgba(244,245,246,0.18); }
+.track-t1   .core-competency { background: var(--c-t1-bg); color: var(--c-t1); border-color: rgba(61,142,245,0.22); }
+.track-t2   .core-competency { background: var(--c-t2-bg); color: var(--c-t2); border-color: rgba(0,212,170,0.22); }
+.track-t3   .core-competency { background: var(--c-t3-bg); color: var(--c-t3); border-color: rgba(240,165,0,0.22); }
+.track-t5   .core-competency { background: var(--c-t5-bg); color: var(--c-t5); border-color: rgba(232,91,255,0.22); }
+.core-competency i { font-size: 9px; }
+.core-competency-label { opacity: 0.5; margin-right: 2px; font-size: 9px; }
+
+/* ─── Skills ─── */
+.skills-section { margin-bottom: 22px; }
+.skills-label {
+  font-family: var(--font-display); font-size: 9px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.2em;
+  color: var(--text-muted); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.skills-label::after { content: ''; flex: 1; height: 1px; background: rgba(31,83,229,0.22); }
+.skills-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.skill-pill {
+  font-size: 11px; font-weight: 500; padding: 5px 12px; border-radius: 2px;
+  border: 1px solid var(--border); color: var(--text-secondary);
+  background: rgba(1,10,68,0.50);
+  display: flex; align-items: center; gap: 6px;
+  transition: all var(--transition);
+}
+.skill-pill:hover { border-color: rgba(31,83,229,0.38); color: var(--text-primary); }
+
+/* ─── Habilidades ─── */
+.habilidades-section { margin-bottom: 28px; }
+.habilidades-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.habilidades-list li {
+  font-size: 13px; color: var(--text-secondary);
+  display: flex; align-items: baseline; gap: 10px;
+}
+.habilidades-list li::before {
+  content: '▸'; font-size: 10px; font-weight: 700; flex-shrink: 0;
+}
+.track-base .habilidades-list li::before { color: var(--c-base); }
+.track-t1   .habilidades-list li::before { color: var(--c-t1); }
+.track-t2   .habilidades-list li::before { color: var(--c-t2); }
+.track-t3   .habilidades-list li::before { color: var(--c-t3); }
+.track-t5   .habilidades-list li::before { color: var(--c-t5); }
+
+/* ─── Eco label ─── */
+.eco-label {
+  font-family: var(--font-display); font-size: 9px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.2em;
+  color: var(--text-muted); margin: 18px 0 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.eco-label::after { content: ''; flex: 1; height: 1px; background: rgba(31,83,229,0.22); }
+
+/* ─────────────── COURSE CARDS ─────────────── */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.course-card {
+  background: rgba(1, 18, 100, 0.20);
+  border: 1px solid var(--border);
+  border-radius: 2px; padding: 18px 18px 16px;
+  cursor: pointer; text-decoration: none;
+  transition: border-color var(--transition), background var(--transition), transform var(--transition), box-shadow var(--transition);
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.course-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  opacity: 0; transition: opacity var(--transition);
+}
+.track-base .course-card::before { background: var(--c-base); }
+.track-t1   .course-card::before { background: var(--c-t1); }
+.track-t2   .course-card::before { background: var(--c-t2); }
+.track-t3   .course-card::before { background: var(--c-t3); }
+.track-t5   .course-card::before { background: var(--c-t5); }
+
+.course-card:hover {
+  border-color: rgba(31,83,229,0.42); background: rgba(4,38,172,0.30);
+  transform: translateY(-2px); box-shadow: 0 8px 32px rgba(1,12,83,0.45);
+}
+.course-card:hover::before { opacity: 1; }
+
+.course-card-title {
+  font-family: var(--font-body); font-size: 13px; font-weight: 500;
+  color: var(--text-primary); line-height: 1.5; flex: 1;
+}
+
+.course-badge-new {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--font-display); font-size: 9px; font-weight: 800;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 2px;
+  background: rgba(240,165,0,0.10); color: #f0a500;
+  border: 1px solid rgba(240,165,0,0.22); width: fit-content;
+}
+.course-badge-prod {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--font-display); font-size: 9px; font-weight: 800;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 2px;
+  background: rgba(61,142,245,0.10); color: #3d8ef5;
+  border: 1px solid rgba(61,142,245,0.22); width: fit-content;
+}
+
+.course-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 10px; border-top: 1px solid rgba(31,83,229,0.18);
+}
+.course-cta {
+  font-family: var(--font-display); font-size: 9px; font-weight: 800;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 5px 14px; border-radius: 2px; border: none; cursor: pointer;
+  transition: all var(--transition); text-decoration: none;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.track-base .course-cta { background: rgba(244,245,246,0.08); color: var(--c-base); }
+.track-t1   .course-cta { background: var(--c-t1-bg); color: var(--c-t1); }
+.track-t2   .course-cta { background: var(--c-t2-bg); color: var(--c-t2); }
+.track-t3   .course-cta { background: var(--c-t3-bg); color: var(--c-t3); }
+.track-t5   .course-cta { background: var(--c-t5-bg); color: var(--c-t5); }
+.course-cta:hover { filter: brightness(1.25); transform: translateX(2px); }
+.course-level { font-size: 10px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; font-weight: 600; letter-spacing: 0.05em; }
+
+/* ─────────────── EMPTY STATE ─────────────── */
+.empty-state { text-align: center; padding: 80px 24px; color: var(--text-muted); display: none; }
+.empty-state i { font-size: 36px; margin-bottom: 16px; display: block; }
+
+/* ─────────────── DOCS SECTION ─────────────── */
+.docs-section {
+  text-align: center; padding: 52px 40px 60px;
+  border-top: 1px solid rgba(31,83,229,0.18);
+}
+.docs-section-label {
+  font-family: var(--font-display); font-size: 10px; font-weight: 800;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 18px;
+}
+.docs-buttons { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(1,12,83,0.55); border: 1px solid rgba(31,83,229,0.28);
+  color: var(--text-secondary); font-family: var(--font-display);
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 9px 20px; border-radius: 2px; cursor: pointer;
+  text-decoration: none; transition: all var(--transition);
+}
+.btn-primary:hover {
+  border-color: var(--dev-blue); color: var(--white-snow);
+  background: rgba(31,83,229,0.18); transform: translateY(-1px);
+}
+
+/* ─────────────── FOOTER ─────────────── */
+.page-footer {
+  border-top: 1px solid rgba(31,83,229,0.18);
+  padding: 36px 40px; text-align: center;
+  color: var(--text-muted); font-size: 12px;
+  background: #03040a;
+}
+.page-footer strong { color: var(--white-snow); font-weight: 700; letter-spacing: 0.04em; }
+
+/* ─────────────── ANIMATIONS ─────────────── */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.course-card.hidden { display: none; }
+.track-section.all-hidden { display: none; }
+
+/* ─────────────── RESPONSIVE ─────────────── */
+@media (max-width: 1024px) {
+  .paradox-grid { grid-template-columns: repeat(2, 1fr); }
+  .journey-pillars { grid-template-columns: repeat(3, 1fr); }
+  .audience-layout { grid-template-columns: 1fr; gap: 40px; }
+  .outcome-layout { grid-template-columns: 1fr; gap: 40px; }
+  .quote-pair { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .navbar { padding: 0 20px; }
+  .hero { padding: 100px 20px 60px; }
+  .hero h1 { font-size: 56px; }
+  .hero-stats { max-width: 100%; }
+  .hero-stat { padding: 18px 14px; }
+  .controls { padding: 10px 20px; }
+  .controls-inner { flex-direction: column; align-items: stretch; }
+  .main { padding: 36px 20px 64px; }
+  .track-header { padding: 22px 22px; }
+  .track-body { padding: 0 22px; }
+  .track-box.open .track-body { padding: 22px 22px 26px; }
+  .courses-grid { grid-template-columns: 1fr 1fr; }
+  .section-block { padding: 56px 20px; }
+  .paradox-grid { grid-template-columns: 1fr; }
+  .diff-grid { grid-template-columns: 1fr; }
+  .journey-pillars { grid-template-columns: 1fr 1fr; }
+  .docs-section { padding: 44px 20px 52px; }
+}
+@media (max-width: 480px) {
+  .courses-grid { grid-template-columns: 1fr; }
+  .hero-stat-n { font-size: 30px; }
+  .journey-pillars { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar" id="navbar">
+  <div class="navbar-inner">
+    <span class="navbar-logo-wrap" aria-label="Alura">
+      <svg class="navbar-logo-svg" viewBox="0 0 96 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 24 L10 4 L18 24 M5.5 17 H14.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <line x1="23" y1="4" x2="23" y2="24" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+        <path d="M28 10 L28 20 Q28 24 32 24 Q36 24 36 20 L36 10" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M41 10 L41 24 M41 15 Q43 10 48 11" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <path d="M54 13 Q54 10 58 10 Q63 10 63 14 L63 24 M63 18 Q61 24 55 24 Q52 24 52 21 Q52 18 58 17 L63 16" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <div class="navbar-divider"></div>
+      <span class="navbar-tag">AI Business Lab</span>
+    </span>
+    <span class="navbar-label">Hub de Formação Prática em IA</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-video-bg">
+    <iframe src="https://player.vimeo.com/video/1197007614?badge=0&autopause=0&player_id=0&app_id=58479&background=1&autoplay=1&loop=1&muted=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" referrerpolicy="strict-origin-when-cross-origin" title="hero_bg"></iframe>
+  </div>
+  <script src="https://player.vimeo.com/api/player.js"></script>
+
+  <div class="hero-eyebrow"><i class="fa-solid fa-bolt"></i> Hub de Formação Prática</div>
+  <h1>AI Business<br><span class="grad">Lab</span></h1>
+  <p class="hero-tagline">IA que trabalha com você</p>
+  <p class="hero-sub">Para profissionais de negócio versáteis que precisam aplicar IA no dia a dia - sem virar desenvolvedor.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-n">5</div><div class="hero-stat-l">Trilhas</div></div>
+    <div class="hero-stat"><div class="hero-stat-n">27</div><div class="hero-stat-l">Cursos</div></div>
+    <div class="hero-stat"><div class="hero-stat-n">3</div><div class="hero-stat-l">Ecossistemas</div></div>
+    <div class="hero-stat"><div class="hero-stat-n">100%</div><div class="hero-stat-l">Prática</div></div>
+  </div>
+  <a href="#main" class="hero-cta"><i class="fa-solid fa-play"></i> Explorar trilhas</a>
+</section>
+
+<!-- PARADOX SECTION -->
+<section class="paradox-section">
+  <div class="section-block">
+    <div class="paradox-header">
+      <div class="section-eyebrow"><i class="fa-solid fa-triangle-exclamation"></i> O contexto</div>
+      <h2 class="section-title">O paradoxo do profissional <em>moderno com IA</em></h2>
+      <p class="section-lead">A pressão para usar IA é real. A clareza sobre como aplicá-la, não. Profissionais testam ferramentas no escuro, gastam tempo em tarefas repetitivas e muitas vezes dependem de especialistas técnicos para o que deveria ser autônomo.</p>
+    </div>
+    <div class="paradox-grid">
+      <div class="paradox-card">
+        <div class="paradox-icon"><i class="fa-solid fa-bolt"></i></div>
+        <div class="paradox-card-title">Excesso Operacional</div>
+        <div class="paradox-card-desc">Tarefas repetitivas consomem tempo de decisão estratégica.</div>
+      </div>
+      <div class="paradox-card">
+        <div class="paradox-icon"><i class="fa-solid fa-link"></i></div>
+        <div class="paradox-card-title">Ferramentas Desconectadas</div>
+        <div class="paradox-card-desc">Dezenas de apps sem integração - retrabalho e perda de contexto.</div>
+      </div>
+      <div class="paradox-card">
+        <div class="paradox-icon"><i class="fa-solid fa-chart-bar"></i></div>
+        <div class="paradox-card-title">Informação sem Decisão</div>
+        <div class="paradox-card-desc">Dados em abundância, mas sem transformar em insight acionável.</div>
+      </div>
+      <div class="paradox-card">
+        <div class="paradox-icon"><i class="fa-solid fa-crosshairs"></i></div>
+        <div class="paradox-card-title">IA sem Método</div>
+        <div class="paradox-card-desc">Sensação de testar ferramentas aleatoriamente, sem saber quando usar cada uma.</div>
+      </div>
+      <div class="paradox-card">
+        <div class="paradox-icon"><i class="fa-solid fa-hourglass-half"></i></div>
+        <div class="paradox-card-title">Medo de Ficar para Trás</div>
+        <div class="paradox-card-desc">Pressão crescente para adotar IA, sem clareza sobre por onde começar.</div>
+      </div>
+      <div class="paradox-card">
+        <div class="paradox-icon"><i class="fa-solid fa-lock"></i></div>
+        <div class="paradox-card-title">Dependência Técnica</div>
+        <div class="paradox-card-desc">Precisar de especialista técnico para executar o que deveria ser autonomia do próprio profissional.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE SECTION -->
+<section class="quote-section">
+  <div class="section-block">
+    <div class="section-eyebrow"><i class="fa-solid fa-quote-left"></i> A pergunta que define o Lab</div>
+    <div class="quote-pair">
+      <div class="quote-item">
+        <p class="quote-text">IA já faz parte da infraestrutura nas organizações. Mas como usá-la de forma estratégica e inteligente para transformá-la em resultado real?</p>
+        <div class="quote-source">O ponto de partida</div>
+      </div>
+      <div class="quote-item">
+        <p class="quote-text">O AI Business Lab existe para fechar essa distância: entre "sei que IA importa" e "consigo aplicar IA de forma útil, segura e escalável no meu trabalho."</p>
+        <div class="quote-source">Nossa proposta</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIENCE SECTION -->
+<section class="audience-section">
+  <div class="section-block">
+    <div class="section-eyebrow"><i class="fa-solid fa-user-tie"></i> Público-Alvo</div>
+    <h2 class="section-title">Para o profissional de negócios <em>com autonomia</em></h2>
+    <div class="audience-layout">
+      <div>
+        <p class="audience-desc">Analistas, coordenadores, especialistas, líderes de equipe - Marketing, RH, Vendas, Operações, PMs.</p>
+        <p class="audience-desc" style="margin-top:14px">Resolve problemas, conecta áreas, organiza processos e influencia decisões. Usa Excel e ferramentas de produtividade todos os dias. Não é dev, mas quer ser mais estratégico e menos operacional.</p>
+        <p class="audience-desc" style="margin-top:14px">Pode ser iniciante em IA, mas não necessariamente é iniciante em carreira. Tem experiência de trabalho corporativo e uso básico de Office/Workspace.</p>
+      </div>
+      <ul class="audience-list">
+        <li class="audience-item">
+          <i class="fa-solid fa-check"></i>
+          <span>Experiência de trabalho corporativo e uso básico de Office ou Workspace</span>
+        </li>
+        <li class="audience-item">
+          <i class="fa-solid fa-check"></i>
+          <span>Sem necessidade de conhecimento em programação ou IA</span>
+        </li>
+        <li class="audience-item">
+          <i class="fa-solid fa-check"></i>
+          <span>Profissionais que querem ser mais estratégicos e menos operacionais</span>
+        </li>
+        <li class="audience-item">
+          <i class="fa-solid fa-check"></i>
+          <span>Quem precisa entregar mais com menos dependência técnica</span>
+        </li>
+        <li class="audience-item">
+          <i class="fa-solid fa-check"></i>
+          <span>Times de negócios que querem transformar processos com IA</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY SECTION -->
+<section class="journey-section">
+  <div class="section-block">
+    <div class="journey-intro">
+      <div class="section-eyebrow"><i class="fa-solid fa-route"></i> A Jornada</div>
+      <h2 class="section-title">A jornada que acompanha <em>a maturidade</em></h2>
+      <p class="journey-note">Cada pilar representa uma dimensão crítica da transformação profissional. Funcionam de forma independente, mas potencializam resultados quando combinados em uma jornada integrada.</p>
+    </div>
+    <div class="journey-pillars">
+      <div class="journey-pillar pillar-base">
+        <div class="pillar-icon"><i class="fa-solid fa-seedling"></i></div>
+        <div class="pillar-label">Base</div>
+        <div class="pillar-name">Letramento</div>
+        <div class="pillar-competency">Criar a base para pensar e usar IA</div>
+      </div>
+      <div class="journey-pillar pillar-t1">
+        <div class="pillar-icon"><i class="fa-solid fa-rocket"></i></div>
+        <div class="pillar-label">01 · Eficiência</div>
+        <div class="pillar-name">IA no dia a dia</div>
+        <div class="pillar-competency">Executar melhor com IA</div>
+      </div>
+      <div class="journey-pillar pillar-t2">
+        <div class="pillar-icon"><i class="fa-solid fa-code"></i></div>
+        <div class="pillar-label">02 · Vibe Coding</div>
+        <div class="pillar-name">Vibe Coding</div>
+        <div class="pillar-competency">Materializar ideias sem código tradicional</div>
+      </div>
+      <div class="journey-pillar pillar-t3">
+        <div class="pillar-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <div class="pillar-label">03 · Dados</div>
+        <div class="pillar-name">Dados e Decisão</div>
+        <div class="pillar-competency">Decidir melhor com IA</div>
+      </div>
+      <div class="journey-pillar pillar-t5">
+        <div class="pillar-icon"><i class="fa-solid fa-gears"></i></div>
+        <div class="pillar-label">04 · Agentes</div>
+        <div class="pillar-name">Automação</div>
+        <div class="pillar-competency">Orquestrar trabalho com IA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFFERENTIALS SECTION -->
+<section class="diff-section">
+  <div class="section-block">
+    <div class="section-eyebrow"><i class="fa-solid fa-star"></i> Diferenciais</div>
+    <h2 class="section-title">Não é mais do mesmo. <em>É repertório integrado.</em></h2>
+    <div class="diff-grid">
+      <div class="diff-card">
+        <div class="diff-number">01</div>
+        <div class="diff-title">Hub Integrado</div>
+        <div class="diff-desc">Fundamentos, produtividade, vibe coding, dados e automação em jornada progressiva - tudo conectado em uma experiência coesa.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-number">02</div>
+        <div class="diff-title">Aplicado ao Trabalho Real</div>
+        <div class="diff-desc">Casos reais por área funcional. Não exercícios genéricos - situações que você reconhece no seu dia a dia.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-number">03</div>
+        <div class="diff-title">Competências Duráveis</div>
+        <div class="diff-desc">Habilidades que se mantêm relevantes além das ferramentas. O método importa mais do que o app.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOME SECTION -->
+<section class="outcome-section">
+  <div class="section-block">
+    <div class="section-eyebrow"><i class="fa-solid fa-trophy"></i> O Resultado</div>
+    <h2 class="section-title">O profissional que sai do <em>AI Business Lab</em></h2>
+    <div class="outcome-layout">
+      <div>
+        <p class="outcome-desc">Não um especialista técnico. Uma referência de IA aplicada dentro da equipe - capaz de transformar processos, liderar mudanças e construir operações inteligentes com responsabilidade e ética.</p>
+      </div>
+      <div class="outcome-cards">
+        <div class="outcome-card">
+          <div class="outcome-icon"><i class="fa-solid fa-bolt"></i></div>
+          <div class="outcome-body">
+            <div class="outcome-card-title">Mais Rápido</div>
+            <div class="outcome-card-desc">Acelera entregas e reduz tarefas repetitivas com automações práticas.</div>
+          </div>
+        </div>
+        <div class="outcome-card">
+          <div class="outcome-icon"><i class="fa-solid fa-crosshairs"></i></div>
+          <div class="outcome-body">
+            <div class="outcome-card-title">Mais Tático</div>
+            <div class="outcome-card-desc">Apoia decisões com dados e transforma processos em operações inteligentes.</div>
+          </div>
+        </div>
+        <div class="outcome-card">
+          <div class="outcome-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="outcome-body">
+            <div class="outcome-card-title">Mais Preparado</div>
+            <div class="outcome-card-desc">Implementa IA de forma sustentável, segura e alinhada aos valores da organização.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTROLS -->
+<nav class="controls" id="controls">
+  <div class="controls-inner">
+    <div class="search-wrap">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="search" placeholder="Buscar cursos, ferramentas, temas…" autocomplete="off">
+    </div>
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">Todos</button>
+      <button class="filter-btn" data-filter="base">Base</button>
+      <button class="filter-btn" data-filter="t1">01 · Eficiência</button>
+      <button class="filter-btn" data-filter="t2">02 · Vibe Coding</button>
+      <button class="filter-btn" data-filter="t3">03 · Dados</button>
+      <button class="filter-btn" data-filter="t5">04 · Agentes</button>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main" id="main">
+
+  <!-- ===== TRACK BASE ===== -->
+  <section class="track-section track-base" data-track="base">
+    <div class="track-box track-base">
+      <div class="track-header">
+        <div class="track-icon-wrap"><i class="fa-solid fa-seedling"></i></div>
+        <div class="track-meta">
+          <div class="track-badge-row">
+            <span class="track-badge">Base</span>
+            <span class="track-count">3 cursos</span>
+          </div>
+          <div class="track-title">Letramento em IA</div>
+          <div class="track-subtitle">O ponto de partida para atuar com Inteligência Artificial</div>
+          <div class="track-desc">Estabelece a base necessária para qualquer profissional que deseja trabalhar com IA de forma consciente e segura. O foco está no desenvolvimento do letramento: compreender o que é IA, como os modelos funcionam, quais são seus limites, riscos, oportunidades e impactos no ambiente corporativo.</div>
+          <div class="core-competency"><i class="fa-solid fa-bullseye"></i><span class="core-competency-label">Competência Central</span> Criar a base para pensar e usar IA</div>
+        </div>
+        <div class="track-toggle"><i class="fa-solid fa-chevron-down"></i></div>
+      </div>
+      <div class="track-body">
+        <div class="skills-section">
+          <div class="skills-label"><i class="fa-solid fa-star" style="color:var(--c-base);font-size:9px"></i> Assuntos que você vai explorar</div>
+          <div class="skills-pills">
+            <span class="skill-pill"><i class="fa-solid fa-brain" style="color:var(--c-base)"></i> Definição, importância e impacto da IA</span>
+            <span class="skill-pill"><i class="fa-solid fa-pen-nib" style="color:var(--c-base)"></i> Construção de prompts com contexto e reutilizáveis</span>
+            <span class="skill-pill"><i class="fa-solid fa-magnifying-glass" style="color:var(--c-base)"></i> Pensamento crítico com IA</span>
+            <span class="skill-pill"><i class="fa-solid fa-shield-halved" style="color:var(--c-base)"></i> Ética e mitigação de vieses</span>
+            <span class="skill-pill"><i class="fa-solid fa-scale-balanced" style="color:var(--c-base)"></i> Como evitar riscos de IA</span>
+            <span class="skill-pill"><i class="fa-solid fa-comments" style="color:var(--c-base)"></i> Estrutura para decisões assistidas por IA</span>
+          </div>
+        </div>
+        <div class="habilidades-section">
+          <div class="skills-label"><i class="fa-solid fa-graduation-cap" style="color:var(--c-base);font-size:9px"></i> Habilidades que você vai desenvolver</div>
+          <ul class="habilidades-list">
+            <li>Compreender conceitos fundamentais que norteiam a IA Generativa</li>
+            <li>Avaliar riscos, limitações e impactos da IA nos negócios</li>
+            <li>Construir prompts claros e eficazes</li>
+            <li>Validar respostas geradas por IA com pensamento crítico</li>
+            <li>Aplicar boas práticas de uso responsável da IA</li>
+            <li>Selecionar ferramentas adequadas para diferentes objetivos</li>
+          </ul>
+        </div>
+        <div class="courses-grid">
+          <a class="course-card" data-track="base" data-title="Letramento em Inteligência Artificial" href="https://cursos.alura.com.br/course/letramento-em-ia-competencias-essenciais-dominio-critico" target="_blank">
+            <div class="course-card-title">Letramento em Inteligência Artificial</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Base</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+          <a class="course-card" data-track="base" data-title="Engenharia de Prompt: criando prompts eficazes para IA Generativa" href="https://cursos.alura.com.br/course/engenharia-prompt-criando-prompts-eficazes-ia-generativa" target="_blank">
+            <span class="course-badge-new"><i class="fa-solid fa-hammer"></i> Novo - Em Produção</span>
+            <div class="course-card-title">Engenharia de Prompt: criando prompts eficazes para IA Generativa</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Base</span>
+              <span class="course-cta">Em breve <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+          <a class="course-card" data-track="base" data-title="Ética em Inteligência Artificial: mitigando vieses e garantindo transparência" href="https://cursos.alura.com.br/course/etica-gestao-vieses-regulacao-ia" target="_blank">
+            <div class="course-card-title">Ética em Inteligência Artificial: mitigando vieses e garantindo transparência</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Base</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TRACK T1 ===== -->
+  <section class="track-section track-t1" data-track="t1">
+    <div class="track-box track-t1">
+      <div class="track-header">
+        <div class="track-icon-wrap"><i class="fa-solid fa-rocket"></i></div>
+        <div class="track-meta">
+          <div class="track-badge-row">
+            <span class="track-badge">01 · Eficiência</span>
+            <span class="track-count">10 cursos</span>
+          </div>
+          <div class="track-title">IA no dia a dia</div>
+          <div class="track-subtitle">IA integrada às rotinas, comunicação e produção multimodal</div>
+          <div class="track-desc">Focado em ganho de eficiência operacional e criativa, aceleração de entregas e organização inteligente do trabalho. Explora como utilizar IA para produção de documentos, apresentações, resumos, pesquisas, comunicação eficiente e criação multimodal (texto, imagem, áudio e vídeo). <br><br>As ferramentas são organizadas conforme os principais ecossistemas corporativos, com o objetivo de transformar a IA em uma extensão do profissional: criando fluxos integrados, reduzindo tempo em tarefas repetitivas e ampliando capacidade de organização, análise e execução.</div>
+          <div class="core-competency"><i class="fa-solid fa-bullseye"></i><span class="core-competency-label">Competência Central</span> Executar melhor com IA</div>
+        </div>
+        <div class="track-toggle"><i class="fa-solid fa-chevron-down"></i></div>
+      </div>
+      <div class="track-body">
+        <div class="skills-section">
+          <div class="skills-label"><i class="fa-solid fa-star" style="color:var(--c-t1);font-size:9px"></i> Assuntos que você vai explorar</div>
+          <div class="skills-pills">
+            <span class="skill-pill"><i class="fa-solid fa-bolt" style="color:var(--c-t1)"></i> Rotinas de trabalho estruturadas e integradas com IA</span>
+            <span class="skill-pill"><i class="fa-solid fa-envelope" style="color:var(--c-t1)"></i> E-mails e documentos gerados com IA</span>
+            <span class="skill-pill"><i class="fa-solid fa-file-powerpoint" style="color:var(--c-t1)"></i> Relatórios e apresentações com Copilot</span>
+            <span class="skill-pill"><i class="fa-solid fa-users" style="color:var(--c-t1)"></i> Colaboração com Teams e IA</span>
+            <span class="skill-pill"><i class="fa-solid fa-robot" style="color:var(--c-t1)"></i> Gemini como assistente de criação</span>
+            <span class="skill-pill"><i class="fa-solid fa-calendar-check" style="color:var(--c-t1)"></i> Fluxo integrado no Workspace (Docs, Slides, Gmail, Agenda e mais)</span>
+            <span class="skill-pill"><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--c-t1)"></i> Gems: assistentes reutilizáveis para tarefas reais</span>
+            <span class="skill-pill"><i class="fa-solid fa-book-open" style="color:var(--c-t1)"></i> Dossiê estratégico com Deep Research + NotebookLM</span>
+            <span class="skill-pill"><i class="fa-solid fa-plug" style="color:var(--c-t1)"></i> Claude como hub central de produtividade</span>
+            <span class="skill-pill"><i class="fa-solid fa-diagram-project" style="color:var(--c-t1)"></i> Gestão de projetos com Claude Cowork e OKRs</span>
+          </div>
+        </div>
+        <div class="habilidades-section">
+          <div class="skills-label"><i class="fa-solid fa-graduation-cap" style="color:var(--c-t1);font-size:9px"></i> Habilidades que você vai desenvolver</div>
+          <ul class="habilidades-list">
+            <li>Utilizar IA para acelerar atividades operacionais</li>
+            <li>Produzir textos, apresentações e documentos com apoio de IA</li>
+            <li>Conduzir pesquisas e sínteses de informação</li>
+            <li>Organizar tarefas, reuniões e comunicações corporativas</li>
+            <li>Criar conteúdos multimodais (texto, imagem, áudio e vídeo)</li>
+            <li>Construir assistentes personalizados para funções específicas</li>
+            <li>Integrar IA aos fluxos de trabalho do dia a dia</li>
+            <li>Aumentar produtividade sem perda de qualidade</li>
+          </ul>
+        </div>
+        <div class="courses-grid" style="margin-bottom:4px">
+          <a class="course-card" data-track="t1" data-title="Produtividade: otimizando sua rotina com inteligência artificial" href="https://cursos.alura.com.br/course/produtividade-otimizando-rotina-inteligencia-artificial" target="_blank">
+            <div class="course-card-title">Produtividade: otimizando sua rotina com inteligência artificial</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 01</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+        <div class="eco-label"><i class="fa-brands fa-microsoft" style="color:#0078d4"></i> Ecossistema Microsoft</div>
+        <div class="courses-grid" style="margin-bottom:4px">
+          <a class="course-card" data-track="t1" data-title="Microsoft 365 Copilot: Dominando a comunicação produtiva no Outlook e To Do" href="https://cursos.alura.com.br/course/microsoft-365-copilot-dominando-comunicacao-produtiva-outlook" target="_blank">
+            <div class="course-card-title">Microsoft 365 Copilot: Dominando a comunicação produtiva no Outlook e To Do</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 01</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+          <a class="course-card" data-track="t1" data-title="Microsoft 365 Copilot: Integrando Word, Excel e PowerPoint com IA" href="https://cursos.alura.com.br/course/word-excel-powerpoint-ia" target="_blank">
+            <div class="course-card-title">Microsoft 365 Copilot: Integrando Word, Excel e PowerPoint com IA</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 01</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+          <a class="course-card" data-track="t1" data-title="Microsoft 365 Copilot: Gestão e colaboração avançada com Microsoft Teams" href="https://cursos.alura.com.br/course/microsoft-teams-sem-sobrecarga" target="_blank">
+            <div class="course-card-title">Microsoft 365 Copilot: Gestão e colaboração avançada com Microsoft Teams</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 01</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+        <div class="eco-label"><i class="fa-brands fa-google" style="color:#4285f4"></i> Ecossistema Google</div>
+        <div class="courses-grid" style="margin-bottom:4px">
+          <a class="course-card" data-track="t1" data-title="Gemini: domine o assistente de IA do Google" href="https://cursos.alura.com.br/course/gemini-assistente-ia" target="_blank">
+            <div class="course-card-title">Gemini: domine o assistente de IA do Google</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 01</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+          <a class="course-card" data-track="t1" data-title="Gemini no Google Workspace: comunicação, criação e organização com IA" href="https://cursos.alura.com.br/course/gemini-workspace-rotinas" target="_blank">
+            <div class="course-card-title">Gemini no Google Workspace: comunicação, criação e organização com IA</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 01</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+          <a class="course-card" data-track="t1" data-title="Gems na prática: assistentes inteligentes personalizados com Gemini" href="#" target="_blank">
+            <span class="course-badge-new"><i class="fa-solid fa-sparkles"></i> Novo</span>
+            <div class="course-card-title">Gems na prática: assistentes inteligentes personalizados com Gemini</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 01</span>
+              <span class="course-cta">Em breve <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+          <a class="course-card" data-track="t1" data-title="NotebookLM: pesquisa e gestão de conhecimento com apoio da IA" href="#" target="_blank">
+            <span class="course-badge-new"><i class="fa-solid fa-sparkles"></i> Novo</span>
+            <div class="course-card-title">NotebookLM: pesquisa e gestão de conhecimento com apoio da IA</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 01</span>
+              <span class="course-cta">Em breve <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+        <div class="eco-label"><i class="fa-solid fa-wand-magic-sparkles" style="color:#a78bfa"></i> Ecossistema Claude</div>
+        <div class="courses-grid">
+          <a class="course-card" data-track="t1" data-title="Claude: integrando ferramentas ao seu assistente" href="#" target="_blank">
+            <span class="course-badge-new"><i class="fa-solid fa-sparkles"></i> Novo</span>
+            <div class="course-card-title">Claude: integrando ferramentas ao seu assistente</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 01</span>
+              <span class="course-cta">Em breve <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+          <a class="course-card" data-track="t1" data-title="Claude Cowork: Produtividade e gestão de projetos inteligente" href="https://www.alura.com.br/curso-online-claude-cowork-produtividade-e-gestao-de-projetos-inteligente" target="_blank">
+            <div class="course-card-title">Claude Cowork: Produtividade e gestão de projetos inteligente</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 01</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TRACK T2 ===== -->
+  <section class="track-section track-t2" data-track="t2">
+    <div class="track-box track-t2">
+      <div class="track-header">
+        <div class="track-icon-wrap"><i class="fa-solid fa-code"></i></div>
+        <div class="track-meta">
+          <div class="track-badge-row">
+            <span class="track-badge">02 · Vibe Coding</span>
+            <span class="track-count">3 cursos</span>
+          </div>
+          <div class="track-title">Vibe Coding e MVPs</div>
+          <div class="track-subtitle">O ponto de virada para a autonomia do profissional de negócios</div>
+          <div class="track-desc">O estudante materializa as próprias ideias em software (MVPs) sem programar uma linha de código tradicional. O foco está no movimento Vibe Coding: utilizar linguagem natural para instruir IAs a gerarem aplicações completas, estruturarem bancos de dados e refinarem interfaces.</div>
+          <div class="core-competency"><i class="fa-solid fa-bullseye"></i><span class="core-competency-label">Competência Central</span> Construir soluções com IA</div>
+        </div>
+        <div class="track-toggle"><i class="fa-solid fa-chevron-down"></i></div>
+      </div>
+      <div class="track-body">
+        <div class="skills-section">
+          <div class="skills-label"><i class="fa-solid fa-star" style="color:var(--c-t2);font-size:9px"></i> Assuntos que você vai explorar</div>
+          <div class="skills-pills">
+            <span class="skill-pill"><i class="fa-solid fa-laptop-code" style="color:var(--c-t2)"></i> Vibe Coding - desenvolvimento via conversação</span>
+            <span class="skill-pill"><i class="fa-solid fa-mobile-screen" style="color:var(--c-t2)"></i> Web apps dinâmicos com Lovable e Supabase</span>
+            <span class="skill-pill"><i class="fa-solid fa-layer-group" style="color:var(--c-t2)"></i> Apps web e mobile com Bolt</span>
+            <span class="skill-pill"><i class="fa-solid fa-database" style="color:var(--c-t2)"></i> Integração com bancos de dados (Supabase)</span>
+            <span class="skill-pill"><i class="fa-solid fa-terminal" style="color:var(--c-t2)"></i> Aplicações do zero com Claude Code</span>
+            <span class="skill-pill"><i class="fa-solid fa-file-code" style="color:var(--c-t2)"></i> Documentação e validação assistida por IA</span>
+            <span class="skill-pill"><i class="fa-solid fa-user-shield" style="color:var(--c-t2)"></i> Supervisão humana em projetos de software</span>
+          </div>
+        </div>
+        <div class="habilidades-section">
+          <div class="skills-label"><i class="fa-solid fa-graduation-cap" style="color:var(--c-t2);font-size:9px"></i> Habilidades que você vai desenvolver</div>
+          <ul class="habilidades-list">
+            <li>Transformar ideias de negócio em aplicações funcionais</li>
+            <li>Prototipar soluções digitais rapidamente</li>
+            <li>Utilizar IA para desenvolver software por linguagem natural</li>
+            <li>Estruturar bancos de dados para aplicações de negócios</li>
+            <li>Refinar interfaces e experiências de usuário</li>
+            <li>Testar e iterar MVPs com apoio de IA</li>
+            <li>Gerenciar o ciclo de evolução de produtos digitais</li>
+            <li>Atuar como criador de soluções, não apenas consumidor de software</li>
+          </ul>
+        </div>
+        <div class="courses-grid">
+          <a class="course-card" data-track="t2" data-title="Claude Code: Criando sua primeira aplicação" href="https://cursos.alura.com.br/course/claude-code-criando-sua-primeira-aplicacao" target="_blank">
+            <div class="course-card-title">Claude Code: Criando sua primeira aplicação</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 02</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+          <a class="course-card" data-track="t2" data-title="Lovable: Web Apps dinâmicos com IA" href="https://cursos.alura.com.br/course/flash-skills-lovable" target="_blank">
+            <div class="course-card-title">Lovable: Web Apps dinâmicos com IA</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 02</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+          <a class="course-card" data-track="t2" data-title="Bolt.new: Criando e customizando aplicações web com IA" href="https://cursos.alura.com.br/course/bolt-criando-e-customizando-aplicacoes-web-com-ia" target="_blank">
+            <div class="course-card-title">Bolt.new: Criando e customizando aplicações web com IA</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 02</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TRACK T3 ===== -->
+  <section class="track-section track-t3" data-track="t3">
+    <div class="track-box track-t3">
+      <div class="track-header">
+        <div class="track-icon-wrap"><i class="fa-solid fa-chart-line"></i></div>
+        <div class="track-meta">
+          <div class="track-badge-row">
+            <span class="track-badge">03 · Dados</span>
+            <span class="track-count">4 cursos</span>
+          </div>
+          <div class="track-title">Dados e Decisão</div>
+          <div class="track-subtitle">IA aplicada à análise, relatórios e suporte à decisão</div>
+          <div class="track-desc">A formação evolui para o uso de IA aplicada à interpretação de dados, geração de relatórios e suporte à tomada de decisão. A trilha aborda desde análises operacionais até construção de dashboards, leitura de indicadores, automatização de relatórios e geração de recomendações estratégicas.</div>
+          <div class="core-competency"><i class="fa-solid fa-bullseye"></i><span class="core-competency-label">Competência Central</span> Decidir melhor com IA</div>
+        </div>
+        <div class="track-toggle"><i class="fa-solid fa-chevron-down"></i></div>
+      </div>
+      <div class="track-body">
+        <div class="skills-section">
+          <div class="skills-label"><i class="fa-solid fa-star" style="color:var(--c-t3);font-size:9px"></i> Assuntos que você vai explorar</div>
+          <div class="skills-pills">
+            <span class="skill-pill"><i class="fa-solid fa-lightbulb" style="color:var(--c-t3)"></i> Framework de decisão com apoio de IA</span>
+            <span class="skill-pill"><i class="fa-solid fa-table" style="color:var(--c-t3)"></i> Excel com IA: assistente analítico no dia a dia</span>
+            <span class="skill-pill"><i class="fa-solid fa-gears" style="color:var(--c-t3)"></i> Planilha automatizada com análise assistida</span>
+            <span class="skill-pill"><i class="fa-solid fa-chart-pie" style="color:var(--c-t3)"></i> Relatórios e fluxos inteligentes no Google Sheets</span>
+            <span class="skill-pill"><i class="fa-solid fa-magnifying-glass-chart" style="color:var(--c-t3)"></i> Dados integrados no Workspace</span>
+            <span class="skill-pill"><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--c-t3)"></i> Hipóteses de negócio e dashboards com Claude</span>
+            <span class="skill-pill"><i class="fa-solid fa-file-lines" style="color:var(--c-t3)"></i> Entregáveis executivos e insights acionáveis</span>
+          </div>
+        </div>
+        <div class="habilidades-section">
+          <div class="skills-label"><i class="fa-solid fa-graduation-cap" style="color:var(--c-t3);font-size:9px"></i> Habilidades que você vai desenvolver</div>
+          <ul class="habilidades-list">
+            <li>Interpretar dados para tomada de decisão</li>
+            <li>Identificar padrões, tendências e oportunidades</li>
+            <li>Utilizar IA para exploração e análise de bases de dados</li>
+            <li>Construir relatórios executivos e dashboards</li>
+            <li>Automatizar análises recorrentes</li>
+            <li>Gerar insights orientados ao negócio</li>
+            <li>Formular recomendações baseadas em evidências</li>
+            <li>Comunicar resultados analíticos para diferentes públicos</li>
+          </ul>
+        </div>
+        <div class="courses-grid" style="margin-bottom:4px">
+          <a class="course-card" data-track="t3" data-title="Tomada de decisão com IA: otimizando estratégias com dados" href="https://cursos.alura.com.br/course/tomada-decisao-ia-otimizando-estrategias-dados" target="_blank">
+            <div class="course-card-title">Tomada de decisão com IA: otimizando estratégias com dados</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 03</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+        <div class="eco-label"><i class="fa-brands fa-microsoft" style="color:#0078d4"></i> Ecossistema Microsoft</div>
+        <div class="courses-grid" style="margin-bottom:4px">
+          <a class="course-card" data-track="t3" data-title="Excel com IA: utilizando IA's como assistentes" href="https://cursos.alura.com.br/course/excel-ia-utilizando-ias-assistentes" target="_blank">
+            <span class="course-badge-prod"><i class="fa-solid fa-hammer"></i> Atualizar + Copilot</span>
+            <div class="course-card-title">Excel com IA: utilizando IA's como assistentes</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 03</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+        <div class="eco-label"><i class="fa-brands fa-google" style="color:#4285f4"></i> Ecossistema Google</div>
+        <div class="courses-grid" style="margin-bottom:4px">
+          <a class="course-card" data-track="t3" data-title="Gemini no Google Sheets: relatórios e fluxos inteligentes entre aplicativos" href="https://cursos.alura.com.br/course/gemini-google-sheets" target="_blank">
+            <div class="course-card-title">Gemini no Google Sheets: relatórios e fluxos inteligentes entre aplicativos</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 03</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+        <div class="eco-label"><i class="fa-solid fa-wand-magic-sparkles" style="color:#a78bfa"></i> Ecossistema Claude</div>
+        <div class="courses-grid">
+          <a class="course-card" data-track="t3" data-title="Claude: análise de dados e geração de insights" href="#" target="_blank">
+            <span class="course-badge-prod"><i class="fa-solid fa-hammer"></i> Novo - Em produção</span>
+            <div class="course-card-title">Claude: análise de dados e geração de insights</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 03</span>
+              <span class="course-cta">Em breve <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TRACK T5 ===== -->
+  <section class="track-section track-t5" data-track="t5">
+    <div class="track-box track-t5">
+      <div class="track-header">
+        <div class="track-icon-wrap"><i class="fa-solid fa-gears"></i></div>
+        <div class="track-meta">
+          <div class="track-badge-row">
+            <span class="track-badge">04 · Agentes</span>
+            <span class="track-count">7 cursos</span>
+          </div>
+          <div class="track-title">Automação e Agentes de IA</div>
+          <div class="track-subtitle">Agentes e fluxos automatizados sem código</div>
+          <div class="track-desc">Apresenta como criar fluxos de trabalho inteligentes capazes de integrar ferramentas, executar tarefas automaticamente e operar processos sem necessidade de programação tradicional. A transição da IA como ferramenta para IA como infraestrutura operacional.</div>
+          <div class="core-competency"><i class="fa-solid fa-bullseye"></i><span class="core-competency-label">Competência Central</span> Orquestrar trabalho com IA</div>
+        </div>
+        <div class="track-toggle"><i class="fa-solid fa-chevron-down"></i></div>
+      </div>
+      <div class="track-body">
+        <div class="skills-section">
+          <div class="skills-label"><i class="fa-solid fa-star" style="color:var(--c-t5);font-size:9px"></i> Assuntos que você vai explorar</div>
+          <div class="skills-pills">
+            <span class="skill-pill"><i class="fa-solid fa-sitemap" style="color:var(--c-t5)"></i> Prompts, fluxos condicionais e agentes</span>
+            <span class="skill-pill"><i class="fa-solid fa-plug-circle-bolt" style="color:var(--c-t5)"></i> Power Automate: SharePoint, Teams e Excel Online</span>
+            <span class="skill-pill"><i class="fa-solid fa-robot" style="color:var(--c-t5)"></i> Agentes no-code com Copilot Studio</span>
+            <span class="skill-pill"><i class="fa-solid fa-circle-nodes" style="color:var(--c-t5)"></i> Agente no-code integrado ao ecossistema Google</span>
+            <span class="skill-pill"><i class="fa-solid fa-diagram-project" style="color:var(--c-t5)"></i> n8n: fluxos com Google Sheets, Gmail e integrações</span>
+            <span class="skill-pill"><i class="fa-solid fa-comment-dots" style="color:var(--c-t5)"></i> Agente de IA para WhatsApp com n8n e ZAPI</span>
+            <span class="skill-pill"><i class="fa-solid fa-link" style="color:var(--c-t5)"></i> Zapier: triggers e actions para automatizar apps</span>
+            <span class="skill-pill"><i class="fa-solid fa-shield-check" style="color:var(--c-t5)"></i> Supervisão ética de agentes autônomos</span>
+          </div>
+        </div>
+        <div class="habilidades-section">
+          <div class="skills-label"><i class="fa-solid fa-graduation-cap" style="color:var(--c-t5);font-size:9px"></i> Habilidades que você vai desenvolver</div>
+          <ul class="habilidades-list">
+            <li>Mapear processos passíveis de automação</li>
+            <li>Criar fluxos automatizados sem programação</li>
+            <li>Integrar aplicações e serviços corporativos</li>
+            <li>Construir agentes capazes de executar tarefas autônomas</li>
+            <li>Definir regras, gatilhos e condições de execução</li>
+            <li>Orquestrar múltiplas ferramentas em um único fluxo</li>
+            <li>Reduzir atividades repetitivas e manuais</li>
+            <li>Estruturar operações escaláveis com IA</li>
+          </ul>
+        </div>
+        <div class="courses-grid" style="margin-bottom:4px">
+          <a class="course-card" data-track="t5" data-title="IA no trabalho: produtividade com assistentes e agentes" href="https://cursos.alura.com.br/course/ia-no-trabalho-produtividade-com-assistentes-e-agentes" target="_blank">
+            <div class="course-card-title">IA no trabalho: produtividade com assistentes e agentes</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 04</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+        <div class="eco-label"><i class="fa-brands fa-microsoft" style="color:#0078d4"></i> Ecossistema Microsoft</div>
+        <div class="courses-grid" style="margin-bottom:4px">
+          <a class="course-card" data-track="t5" data-title="Microsoft 365 Copilot: Automação de Processos com Power Automate" href="https://cursos.alura.com.br/course/power-automate-forms-lists-automacao" target="_blank">
+            <div class="course-card-title">Microsoft 365 Copilot: Automação de Processos com Power Automate</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 04</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+          <a class="course-card" data-track="t5" data-title="Copilot Studio: fundamentos e automação" href="https://cursos.alura.com.br/course/copilot-studio-fundamentos-automacao" target="_blank">
+            <div class="course-card-title">Copilot Studio: fundamentos e automação</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 04</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+        <div class="eco-label"><i class="fa-brands fa-google" style="color:#4285f4"></i> Ecossistema Google</div>
+        <div class="courses-grid" style="margin-bottom:4px">
+          <a class="course-card" data-track="t5" data-title="Agentes de IA com Gemini: automatize fluxos de trabalho no Google Workspace" href="#" target="_blank">
+            <div class="course-card-title">Agentes de IA com Gemini: automatize fluxos de trabalho no Google Workspace</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 04</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+        <div class="eco-label"><i class="fa-solid fa-link" style="color:var(--c-t5)"></i> Outras Soluções</div>
+        <div class="courses-grid">
+          <a class="course-card" data-track="t5" data-title="Automação de processos com n8n: Modelagem de fluxos e integração de sistemas" href="https://cursos.alura.com.br/course/automacao-processos-modelagem-de-fluxos-n8n" target="_blank">
+            <div class="course-card-title">Automação de processos com n8n: Modelagem de fluxos e integração de sistemas</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 04</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+          <a class="course-card" data-track="t5" data-title="Agente de IA com n8n: Crie um agente de AI para WhatsApp" href="https://cursos.alura.com.br/course/agente-ia-whatsapp-n8n" target="_blank">
+            <div class="course-card-title">Agente de IA com n8n: Crie um agente de AI para WhatsApp</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 04</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+          <a class="course-card" data-track="t5" data-title="Zapier: Integrando apps para otimizar tarefas" href="https://cursos.alura.com.br/course/zapier-integrando-apps-otimizar-tarefas" target="_blank">
+            <div class="course-card-title">Zapier: Integrando apps para otimizar tarefas</div>
+            <div class="course-footer">
+              <span class="course-level"><i class="fa-solid fa-circle-dot"></i> Nível 04</span>
+              <span class="course-cta">Acessar <i class="fa-solid fa-arrow-right"></i></span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Empty state -->
+  <div class="empty-state" id="emptyState">
+    <i class="fa-solid fa-face-sad-tear" style="color:var(--text-muted)"></i>
+    <p>Nenhum curso encontrado para "<span id="emptyQuery"></span>"</p>
+  </div>
+
+</main>
+
+<section class="docs-section">
+  <p class="docs-section-label">Acesse as documentações</p>
+  <div class="docs-buttons">
+    <a href="https://miro.com/welcomeonboard/bGZ1OXV5M2xkd2FmWEEyM0pyall1TGFjVTlBYVJZOHRsWWhUMVd6RWJoeHg3ZmtiOGtac0lnN1ptQjY3M3Q4dDVpMG5ET0IzL1VNVmdFc3FpdzVuUW5nQlVoRjVzbkVLZ3RuWGRvRjhJUllQWUQ5RWlpNGQySnAzbnY5aTBOSFlnbHpza3F6REdEcmNpNEFOMmJXWXBBPT0hdjE=?share_link_id=215880992218" class="btn-primary" target="_blank">
+      <i class="fa-solid fa-diagram-project"></i> Miro
+    </a>
+    <a href="https://fiapcom-my.sharepoint.com/:w:/g/personal/henrique_bruscagin_alura_com_br/IQAOjpt0n_YzSZnNaBveMLw5AfHBbMN5bJwT_zQU0jFiMBk?e=8g1Wlw" class="btn-primary" target="_blank">
+      <i class="fa-solid fa-file-lines"></i> FAQ e Persona
+    </a>
+    <a href="https://fiapcom-my.sharepoint.com/:w:/g/personal/henrique_bruscagin_alura_com_br/IQDsMeDjtUNPQ6glpnByHef1AeuLb_w6Hx8JZjZSdFOktN4?e=dEkfJL" class="btn-primary" target="_blank">
+      <i class="fa-solid fa-file-lines"></i> Apresentação e Pilares
+    </a>
+    <a href="https://fiapcom-my.sharepoint.com/:w:/g/personal/henrique_bruscagin_alura_com_br/IQBiRiuDHKBqRr1LtZME_IZlAdOA4Zx5FYSDihdudVTcz-Q?e=kCxMdD" class="btn-primary" target="_blank">
+      <i class="fa-solid fa-file-lines"></i> Ponto de encontro - Business &amp; Leadership
+    </a>
+    <a href="https://fiapcom-my.sharepoint.com/:x:/g/personal/henrique_bruscagin_alura_com_br/IQAZF92u6sr9RKc6lQZ0-CKMAU6p_AHT0LYWDeW0IgnJSmM?e=y5bGNq" class="btn-primary" target="_blank">
+      <i class="fa-solid fa-file-lines"></i> Planilha - Cursos
+    </a>
+  </div>
+</section>
+
+<footer class="page-footer">
+  <p><strong>AI Business Lab</strong> · Hub de Formação Prática em IA · Henrique Thomaz Bruscagin</p>
+</footer>
+
+<script>
+(function() {
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Accordion
+  document.querySelectorAll('.track-box').forEach(box => {
+    const header = box.querySelector('.track-header');
+    header.addEventListener('click', () => { box.classList.toggle('open'); });
+  });
+
+  // Search + filter
+  const searchInput = document.getElementById('search');
+  const filterBtns  = document.querySelectorAll('.filter-btn');
+  const sections    = document.querySelectorAll('.track-section');
+  const emptyState  = document.getElementById('emptyState');
+  const emptyQuery  = document.getElementById('emptyQuery');
+
+  let activeFilter = 'all';
+  let activeSearch = '';
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      applyFilters();
+    });
+  });
+
+  searchInput.addEventListener('input', () => {
+    activeSearch = searchInput.value.trim().toLowerCase();
+    applyFilters();
+  });
+
+  function applyFilters() {
+    let anyVisible = false;
+    const hasActiveSearch = activeSearch.length > 0;
+    const hasActiveFilter = activeFilter !== 'all';
+
+    sections.forEach(section => {
+      const trackId = section.dataset.track;
+      const matchesFilter = !hasActiveFilter || activeFilter === trackId;
+      const box = section.querySelector('.track-box');
+      let sectionHasVisible = false;
+
+      section.querySelectorAll('.course-card').forEach(card => {
+        const title = card.dataset.title.toLowerCase();
+        const matchesSearch = !hasActiveSearch || title.includes(activeSearch);
+        if (matchesFilter && matchesSearch) {
+          card.classList.remove('hidden');
+          sectionHasVisible = true;
+          anyVisible = true;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      section.classList.toggle('all-hidden', !sectionHasVisible);
+      if (sectionHasVisible && (hasActiveSearch || hasActiveFilter)) {
+        box.classList.add('open');
+      } else if (!hasActiveSearch && !hasActiveFilter) {
+        box.classList.remove('open');
+      }
+    });
+
+    emptyState.style.display = anyVisible ? 'none' : 'block';
+    emptyQuery.textContent = activeSearch;
+  }
+
+  // Animate sections on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.06 });
+
+  document.querySelectorAll('.paradox-card, .diff-card, .outcome-card, .journey-pillar, .audience-item').forEach((el, i) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = `opacity 0.45s ${i * 0.06}s ease, transform 0.45s ${i * 0.06}s ease`;
+    observer.observe(el);
+  });
+})();
+</script>
+
+</body>
+</html>
